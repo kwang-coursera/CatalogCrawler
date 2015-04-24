@@ -1,0 +1,5 @@
+*.pyc
+raw_output/*
+raw_output/
+dist/
+*.egg-info
