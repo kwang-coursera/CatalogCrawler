@@ -1,9 +1,4 @@
-__author__ = 'kwang'
-
-from abc import ABCMeta, abstractmethod
-
-
-class Course:
+class Course(object):
 
     def __init__(self, info):
         """
@@ -35,13 +30,13 @@ class PartnerCourse(Course):
     # pid,school,field,source,course_id,title,instructor,desc,timestamp,id
 
     required_keys = [
-        'pid', # page_id - the id of the page where the course info is from
+        'page_id', # page_id - the id of the page where the course info is from
         'school', # school - school shortname as used in edw
         'field', # field - area of study
         'source', # source - URL for the course info
         'course_id', # Course ID - the course identifier within its own school
         'title', # title - course title
-        'instructor', # instructor - course instructors
+        'instructors', # instructor - course instructors
         'desc', # course description
         'timestamp', # date when the course data was acquired
         'id' # a combination of school shortname and course id; concatenated by '-'
@@ -50,7 +45,7 @@ class PartnerCourse(Course):
     def __init__(self, info):
         self.data = dict()
         for each in PartnerCourse.required_keys:
-            self.data.setdefault(each, info[each])
+            self.data[each] = info[each]
 
 
 class CompetitorCourse(Course):
@@ -58,7 +53,7 @@ class CompetitorCourse(Course):
         'category',
         'description',
         'enroll',
-        'instructor',
+        'instructors',
         'instructor_desc',
         'price',
         'slug',
@@ -70,15 +65,15 @@ class CompetitorCourse(Course):
     def __init__(self, info):
         self.data = dict()
         for each in CompetitorCourse.required_keys:
-            self.data.setdefault(each, info[each])
+            self.data[each] = info[each]
 
 if __name__ == '__main__':
-    i = dict(pid=1, school='yale', field='art', source='yale.com', course_id='art-001', title='what is art',
-             instructor='tbd', desc='tbd', timestamp='2015-04-22', id='yale-art-001')
+    i = dict(page_id=1, school='yale', field='art', source='yale.com', course_id='art-001', title='what is art',
+             instructors='tbd', desc='tbd', timestamp='2015-04-22', id='yale-art-001')
     c = PartnerCourse(info=i)
     c.print_course()
 
-    u = dict(category='art', description='a class on photoshop', enroll=1000, instructor='tba', instructor_desc='tbd',
+    u = dict(category='art', description='a class on photoshop', enroll=1000, instructors='tba', instructor_desc='tbd',
              price=0.0, slug='learn-photoshop', subtitle='learn photoshop', title='photoshop', provider='udemy')
 
     e = CompetitorCourse(info=u)

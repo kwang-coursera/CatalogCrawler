@@ -1,16 +1,15 @@
-__author__ = 'kwang'
-
-from school import *
+from school import School
+from school import HTMLSchool
+from school import SitemapSchool
 import requests
 import pandas as pd
-from pandas import DataFrame
 import os
-import pred
+import constants
 import time
 from datetime import date
 
 
-class CourseSpider():
+class CourseSpider(object):
 
     name = 'Course Spider'
 
@@ -54,27 +53,26 @@ class CourseSpider():
 
         :param url:
         :param fname:
-        :return: status code
-            0 - success
-            1 - non-200 status code
-            2 - error in requests get
+        :return: constants.CRAWLER_STATUS
         """
         if not os.path.isdir(self.raw_output):
             os.makedirs(self.raw_output)
 
         print '[INFO] crawling: %s' % url
         try:
-            r = requests.get(url, headers=pred.HEADERS)
-        except:
-            return 2
+            r = requests.get(url, headers=constants.HEADERS)
+        except Exception, e:
+            print r.url
+            print e
+            return constants.CRAWL_GET_ERROR
         if r.status_code != 200:
             with open(self.log, 'a') as f:
                 f.write(url)
                 f.write('\n')
-            return 1
+            return constants.CRAWL_NON_200
         with open(self.raw_output+'/'+fname, 'w') as f:
             f.write(r.text.encode('utf-8'))
-        return 0
+        return constants.CRAWL_SUCCESS
 
     def crawl_all(self):
         if not os.path.isdir(self.raw_output):

@@ -1,11 +1,14 @@
-__author__ = 'kwang'
-
-from abc import ABCMeta, abstractmethod
-from course import *
+from course import Course
+from course import PartnerCourse
+from course import CompetitorCourse
 from pandas import DataFrame
 
 
-class Catalog:
+class Catalog(object):
+    """
+    Class catalog contains a list of courses of the same attributes.
+    The class de-duplicates itself, and only keeps unique courses
+    """
 
     def __init__(self, data=None):
         """
@@ -63,6 +66,9 @@ class Catalog:
         """
         return len(self.data)
 
+    def __len__(self):
+        return self.get_catalog_length()
+
     def append_catalog(self, catalog):
         """
 
@@ -84,10 +90,7 @@ class Catalog:
         :return: the schema of the catalog
         :rtype: list
         """
-        if self.get_catalog_length() == 0:
-            return []
-        else:
-            return list(self.data.columns)
+        return list(self.data.columns)
 
 if __name__ == '__main__':
     i = dict(pid=1, school='yale', field='art', source='yale.com', course_id='art-001', title='what is art',

@@ -1,14 +1,12 @@
-__author__ = 'kwang'
-
 from abc import ABCMeta, abstractmethod
 from pandas import DataFrame
 from datetime import date
 import requests
 from lxml import etree
-import pred
+import constants
 
 
-class School:
+class School(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, info, short_name):
@@ -117,7 +115,7 @@ class HTMLSchool(School):
         category_xpath = self.info['category_xpath']
         url_xpath = self.info['url_xpath']
 
-        r = requests.get(url=parent_url, headers=pred.HEADERS)
+        r = requests.get(url=parent_url, headers=constants.HEADERS)
         if r.status_code != 200:
             raise Exception("Cannot connect to parent_url %s" % parent_url)
 
@@ -152,7 +150,7 @@ class SitemapSchool(School):
         base_url = self.info['base_url']
         multi_page = self.info['multi_page']
 
-        r = requests.get(sitemap, headers=pred.HEADERS)
+        r = requests.get(sitemap, headers=constants.HEADERS)
 
         if r.status_code != 200:
             raise Exception("Cannot connect to %s" % r.url)

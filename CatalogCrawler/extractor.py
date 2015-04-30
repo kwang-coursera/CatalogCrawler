@@ -1,17 +1,13 @@
-__author__ = 'kwang'
-
 from abc import ABCMeta, abstractmethod
 from pandas import DataFrame
-import pandas as pd
-from course import *
-from catalog import *
+from catalog import Catalog
 from lxml import etree
 from crawler import CourseSpider
 import os
 from datetime import date
 
 
-class Extractor:
+class Extractor(object):
     __metaclass__ = ABCMeta
 
     name = 'Course Extractor'
