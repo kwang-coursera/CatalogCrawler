@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='CatalogCrawler',
-      version='0.2',
+      version='0.21',
       description='Tools to crawl course catalogs',
       url='',
       author='Ke Wang',

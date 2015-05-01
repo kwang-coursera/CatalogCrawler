@@ -11,7 +11,9 @@ class School(object):
 
     def __init__(self, info, short_name):
         """
-        initialization
+        initialization of the School class
+        the class has to contain at least index and url
+        all items with null url will be dropped
         :param info: information needed to gather item urls
         :param short_name: school short name
         :return: None
@@ -21,6 +23,7 @@ class School(object):
         self.info = info
         self.short_name = short_name
         self.items = self._generate_items()
+        self.items = self.items.dropna(subset=['url'])
         self.urls = self.items[['index', 'url']]
         self.timestamp = date.today()
 
@@ -71,6 +74,7 @@ class School(object):
         :return: timestamp
         :rtype: date
         """
+        return self.timestamp
 
     @abstractmethod
     def _generate_items(self):
@@ -175,23 +179,25 @@ class SitemapSchool(School):
 
 if __name__ == '__main__':
     info = {
-        'parent_url': 'http://catalog.illinois.edu/courses-of-instruction/',
-        'base_url': 'http://catalog.illinois.edu',
-        'item_xpath': '//li//a',
-        'category_xpath': 'text()',
-        'url_xpath': '@href'
-    }
-    p = HTMLSchool(info=info, short_name='illinois')
-    print p.get_school_items()
-    print p.get_school_urls()
-    print p.get_school_name()
+    'parent_url': 'https://courses.rice.edu/admweb/swkscat.main?p_action=cata',
+    'base_url': 'https://courses.rice.edu',
+    'item_xpath': '//*[@class="subjectList"]//tr',
+    'category_xpath': 'td[@class="subjDesc"]//text()',
+    'url_xpath': 'td[@class="subjCode"]//a//@href'
+}
 
-    info = {
-        'sitemap': 'https://www.udemy.com/sitemap.xml',
-        'base_url': 'https://www.udemy.com/sitemap/courses.xml?p=',
-        'multi_page': 1
-    }
-    p = SitemapSchool(info=info, short_name='udemy')
-    print p.get_school_items()
-    print p.get_school_urls()
-    print p.get_school_name()
+    rice = HTMLSchool(info=info, short_name='rice')
+    print rice.get_school_items()
+    print rice.get_school_urls()
+    print rice.get_school_name()
+    rice.to_csv(filename='rice.txt')
+
+    #info = {
+#        'sitemap': 'https://www.udemy.com/sitemap.xml',
+##        'base_url': 'https://www.udemy.com/sitemap/courses.xml?p=',
+#        'multi_page': 1
+#    }
+#    p = SitemapSchool(info=info, short_name='udemy')
+#    print p.get_school_items()
+#    print p.get_school_urls()
+#    print p.get_school_name()
