@@ -36,7 +36,6 @@ class CourseSpider(object):
         self.raw_output = raw_output
         self.log = log
         urls = pd.read_csv(self.name, sep=sep, encoding='utf-8')[['index', 'url']]
-        urls = urls[~pd.isnull(urls['url'])]
         self.urls = urls
         self.timestamp = date.today()
 
