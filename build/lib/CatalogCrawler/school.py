@@ -123,13 +123,14 @@ class HTMLSchool(School):
         if r.status_code != 200:
             raise Exception("Cannot connect to parent_url %s" % parent_url)
 
+        print '[INFO] received parent page'
         res = r.text
         html = etree.HTML(res)
 
         items = html.xpath(item_xpath)
 
-        category = [' '.join(e.xpath(category_xpath)) for e in items]
-        pid = [' '.join(e.xpath(url_xpath)) for e in items]
+        category = [' '.join(etree.HTML(etree.tostring(e)).xpath(category_xpath)) for e in items]
+        pid = [' '.join(etree.HTML(etree.tostring(e)).xpath(url_xpath)) for e in items]
         url = [base_url + e for e in pid]
 
         url_list = DataFrame(
