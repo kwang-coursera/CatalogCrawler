@@ -129,8 +129,8 @@ class HTMLSchool(School):
 
         items = html.xpath(item_xpath)
 
-        category = [' '.join(etree.HTML(etree.tostring(e)).xpath(category_xpath)) for e in items]
-        pid = [' '.join(etree.HTML(etree.tostring(e)).xpath(url_xpath)) for e in items]
+        category = [' '.join(etree.HTML(etree.tostring(e)).xpath(category_xpath)).replace('\n', ' ').strip() for e in items]
+        pid = [' '.join(etree.HTML(etree.tostring(e)).xpath(url_xpath)).replace('\n', ' ').strip() for e in items]
         url = [base_url + e for e in pid]
 
         url_list = DataFrame(
@@ -169,7 +169,7 @@ class SitemapSchool(School):
         urls = []
         for each in url:
             try:
-                r = requests.get(each, headers=headers)
+                r = requests.get(each, headers=constants.HEADERS)
                 links = etree.XML(r.text.encode('utf-8')).xpath('//*/text()')
                 urls = urls + [u for u in links if u.startswith('http')]
             except:
